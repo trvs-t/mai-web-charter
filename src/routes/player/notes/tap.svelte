@@ -1,12 +1,13 @@
 <script lang="ts">
 	import type { TapVisualizeData } from '$lib/data/visualization';
-	import { calcTimeProgress } from '$lib/utils/time';
 	import { onMount } from 'svelte';
 	import { Image } from 'svelte-konva';
-	import { playerConfig } from '../config';
-	import { time } from '../time/timer';
+	import { laneMovement } from './lane';
 
-	export let data: TapVisualizeData | undefined = undefined;
+	export let data: TapVisualizeData = {
+		lane: 1,
+		hitTime: 400
+	};
 
 	let image: HTMLImageElement | undefined;
 	onMount(() => {
@@ -18,21 +19,20 @@
 	const width = size * spriteScale,
 		height = size * spriteScale;
 
-	let displacement = 0;
+	const movement = laneMovement(data.hitTime);
 
-	$: if (data) {
-		const { progress } = calcTimeProgress($time, data.hitTime, 400);
-		displacement = progress * ($playerConfig.radius - $playerConfig.innerPadding);
-	}
+	$: hide = !$movement.hasStarted || $movement.hasEnded;
 </script>
 
-<Image
-	config={{
-		image,
-		width,
-		height,
-		offsetX: width / 2,
-		offsetY: height / 2 - $playerConfig.innerPadding,
-		y: displacement
-	}}
-/>
+{#if !hide}
+	<Image
+		config={{
+			image,
+			width,
+			height,
+			offsetX: width / 2,
+			offsetY: height / 2,
+			y: $movement.displacement
+		}}
+	/>
+{/if}
