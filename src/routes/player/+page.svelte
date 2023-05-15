@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Arc, Group, Layer, Stage } from 'svelte-konva';
 	import RingDot from './RingDot.svelte';
+	import BarLines from './bar-lines/BarLines.svelte';
 	import { playerConfig } from './config';
 	import Hold from './notes/Hold.svelte';
 	import Slide from './notes/slide/Slide.svelte';
@@ -40,6 +41,7 @@
 				<RingDot />
 			</Group>
 		{/each}
+		<BarLines bpm={160} divisionPerBar={4} />
 	</Layer>
 
 	<Layer>

@@ -1,8 +1,11 @@
 <script lang="ts">
 	import Konva from 'konva';
+	import type { CircleConfig } from 'konva/lib/shapes/Circle';
 	import { onMount } from 'svelte';
 	import { Circle } from 'svelte-konva';
 	import { playerConfig } from './config';
+
+	export let config: Partial<CircleConfig> = {};
 
 	let handle: Konva.Circle;
 
@@ -39,7 +42,8 @@
 			con.arc(0, 0, 10, 0, Math.PI * 2, false);
 			con.closePath();
 			con.fillStrokeShape(shape);
-		}
+		},
+		...config
 	}}
 	on:mouseenter={handleMouseEnter}
 	on:mouseleave={handleMouseLeave}
